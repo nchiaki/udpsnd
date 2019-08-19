@@ -45,14 +45,9 @@ while (1)
       secttl = 0;
       gettimeofday(&strtv, NULL);
    }
-#if 0
-   sprintf(sndbuf, "%ld,%06ld %ld UDP send data", tv.tv_sec, tv.tv_usec, sqno);
-   sz = strlen(sndbuf);
-   if (sz < (188+12))
-    sz = (188+12);
-#endif
    sendto(sock, sndbuf, sz, 0, (struct sockaddr *)&addr, sizeof(addr));
    secttl += (sz+MAC_HDRS+IPV4_HDRS+UDP_HDRS);
+   sndbuf[0]++;
 
    gettimeofday(&tv, NULL);
    gettimeofday(&wtv, NULL);
