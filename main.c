@@ -8,47 +8,27 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAC_HDRS  14
-#define IPV4_HDRS 20
-#define UDP_HDRS  8
-#define RTP_HDRS  12
-
-#define RDPTSDTZ  (RTP_HDRS+188)
-#define UDPFRMZ (MAC_HDRS+IPV4_HDRS+UDP_HDRS+RDPTSDTZ)
+#include "procdef.h"
+#include  "glovaldef.h"
+#include  "funcdef.h"
 
 int
 main(int ac, char *av[])
 {
  int sock;
  int  sz;
- struct sockaddr_in addr;
  char sndbuf[2000];
- struct timeval tv, strtv, trmtv, itvl, wtv;
+ struct timeval tv, strtv, trmtv, wtv;
  //long sqno = 0;
  long secttl = 0;
- long mrate, bytmrate, pacrate;
 
- mrate = 20000000;
- if (2 <= ac)
- {
-   mrate = atoi(av[1]);
- }
- bytmrate = mrate / 8;
- pacrate = bytmrate / UDPFRMZ;
- itvl.tv_usec = 1000000 / pacrate;
- itvl.tv_usec *= 93;  /* x 0.93 */
- itvl.tv_usec /= 100;
- itvl.tv_sec = 0;
+cmd_proc(ac, av);
 
  printf("%ld bps %ld byteps %ld packps interval %ld.%06ld", mrate, bytmrate, pacrate, itvl.tv_sec, itvl.tv_usec);
 
  sock = socket(AF_INET, SOCK_DGRAM, 0);
 
- addr.sin_family = AF_INET;
- addr.sin_port = htons(55000);
- addr.sin_addr.s_addr = inet_addr("192.168.113.212");
-
-sz = RDPTSDTZ;
+sz = udpdatsz;
 gettimeofday(&tv, NULL);
 gettimeofday(&strtv, NULL);
 while (1)

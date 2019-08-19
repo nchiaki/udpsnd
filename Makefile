@@ -8,7 +8,7 @@ CFLAGS=-ggdb -Wall  $(DBGFLG)
 #LDFLAGS=-Xlinker --cref
 TARGETS=udpsnd
 
-SRCS=main.c
+SRCS=main.c cmdproc.c gloval.c
 
 OBJS=$(SRCS:.c=.o)
 
