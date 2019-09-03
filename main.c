@@ -21,6 +21,7 @@ main(int ac, char *av[])
  struct timeval tv, strtv, trmtv, wtv;
  //long sqno = 0;
  long secttl = 0;
+ unsigned short int sndseq;
 
 cmd_proc(ac, av);
 
@@ -45,9 +46,11 @@ while (1)
       secttl = 0;
       gettimeofday(&strtv, NULL);
    }
+   sndbuf[2] = (sndseq & 0xff00) >> 8;
+   sndbuf[3] = (sndseq & 0x00ff);
+   sndseq++;
    sendto(sock, sndbuf, sz, 0, (struct sockaddr *)&addr, sizeof(addr));
    secttl += (sz+MAC_HDRS+IPV4_HDRS+UDP_HDRS);
-   sndbuf[0]++;
 
    gettimeofday(&tv, NULL);
    gettimeofday(&wtv, NULL);
